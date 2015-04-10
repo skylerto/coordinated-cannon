@@ -11,8 +11,8 @@ public class CoordUser {
 
 	public static void main(String args[]) {
 		Scanner in = new Scanner(System.in);
-		String input, ip;
-		int time, port;
+		String input, ip = null;
+		int time, port = 0;
 		ArrayList<Integer> ports = new ArrayList<Integer>();
 
 		System.out.println("Welcome to Trojan Cannon, you're a coordinator!");
@@ -35,11 +35,11 @@ public class CoordUser {
 						System.out
 								.printf("  The time you've chosen is: %d today\n",
 										time);
-						coord = new Coordinator(time, ports);
+						coord = new Coordinator(time, ports, ip, port);
 
 					} catch (NumberFormatException e) {
 						System.out
-								.print("Please enter a time of attack (HHMMSS): ");
+								.print("Please enter a time of attack (in milliseconds from now): ");
 						input = in.nextLine();
 					}
 				}

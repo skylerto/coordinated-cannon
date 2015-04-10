@@ -23,7 +23,7 @@ public class ClientUser {
 				} else {
 					System.out.println("  Waiting to receive time from Coordinator");
 					attacker = new Client(myport, ip, port);
-					attacker.attack();
+					attacker.getTOA();
 				}
 			} else if(input.compareTo("attackinfo") == 0){
 				

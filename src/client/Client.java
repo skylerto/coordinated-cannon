@@ -6,8 +6,12 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 import server.Server;
+
+
+
 
 public class Client implements Attacker {
 	
@@ -21,10 +25,16 @@ public class Client implements Attacker {
 	
 	private int TOA;
 	
+	
+	protected static PrintWriter out;
+	protected static BufferedReader in;
+	protected static BufferedReader stdIn;
+	protected static Socket echoSocket;
+	
 	public Client(int myport, String attackIP, int attackPort){
 		this.attackingIP = attackIP;
 		this.attackingPort = attackPort;
-		this.portNumb = myport;
+		this.listeningPort = myport;
 	}
 	
 	/**
@@ -36,6 +46,8 @@ public class Client implements Attacker {
 		BufferedReader in;
 		
 		try {
+			serverSocket = new ServerSocket(listeningPort);
+			
 			socket = serverSocket.accept();
 			
 			in = new BufferedReader(new InputStreamReader(
@@ -44,7 +56,28 @@ public class Client implements Attacker {
 			out = new PrintWriter(socket.getOutputStream(), true);
 			
 			String input = in.readLine();
-			System.out.println(input);
+			TOA = Integer.parseInt(input);
+			TOA = (int) (System.currentTimeMillis() + TOA);
+			System.out.println(TOA);
+			
+			attackingIP = in.readLine();
+			System.out.println(attackingIP);
+			
+			input = in.readLine();
+			attackingPort = Integer.parseInt(input);
+			System.out.println(attackingIP);
+			try {
+				socket.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				serverSocket.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -52,6 +85,7 @@ public class Client implements Attacker {
 		}
 		
 		this.attack();
+		
 	}
 
 	/**
@@ -59,8 +93,34 @@ public class Client implements Attacker {
 	 */
 	@Override
 	public void attack() {
-		
-		
+		System.out.println("Waiting for the right time...");
+		while(( (int) System.currentTimeMillis()) != TOA){}
+			
+		System.out.println("The time is now, FIRE!!!");
+
+		try {
+			echoSocket = new Socket(attackingIP, attackingPort);
+			out = new PrintWriter(echoSocket.getOutputStream(), true);
+			in = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
+			stdIn = new BufferedReader(new InputStreamReader(System.in));
+			
+			System.out.println("Connected and waiting for 30 secs");;
+			out.println("We are coming for you!");
+
+			while(( (int) System.currentTimeMillis()) != (TOA + 30000)){}
+
+			System.out.println("Done, closing connection");
+
+			echoSocket.close();
+
+		} catch (UnknownHostException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
 	}
 
 }
