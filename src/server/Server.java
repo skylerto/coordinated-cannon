@@ -6,36 +6,48 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Scanner;
 
+/**
+ * Class allows connections on a certain, specified port.
+ * 
+ * @author cse23170 (212166906)
+ *
+ */
 public class Server {
 
 	private static ServerSocket serverSocket;
-	private static int listeningPort = 9999;
+	private int listeningPort;
 
-	public static void main(String args[]) {
+	public Server(int port) {
+		this.listeningPort = port;
+	}
+	
+	public int getPort(){
+		return this.listeningPort;
+	}
+
+	public void connect() {
 		Socket socket;
-		PrintWriter out;
 		BufferedReader in;
+		
 
+		// BEGIN LISTENING ON THE DESIRED PORT
 		try {
 			serverSocket = new ServerSocket(listeningPort);
-			System.out.println("Server started.");
+			System.out.println("Server started on port: " + listeningPort);
 			while (true) {
 				socket = serverSocket.accept();
 
 				in = new BufferedReader(new InputStreamReader(
 						socket.getInputStream()));
-				out = new PrintWriter(socket.getOutputStream(), true);
-				System.out.println("Server started.");
 
 				String input = in.readLine();
 				System.out.println(input);
 			}
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-
 }

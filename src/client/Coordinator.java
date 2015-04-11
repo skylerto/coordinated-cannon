@@ -1,46 +1,56 @@
 package client;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
+import java.util.Map;
 
-public class Coordinator {
+/**
+ * Deals with connection to attackers to broadcast the time of attack and the
+ * target.
+ * 
+ * @author cse23170 (212166906)
+ *
+ */
+public class Coordinator implements Attacker {
 
 	private int timeOfAttack;
-//	private int port = 2080;
-//	private String ip;
-	
 	private String attackingIP;
 	private int attackingPort;
-	
-	protected static PrintWriter out;
-	protected static BufferedReader in;
-	protected static BufferedReader stdIn;
-	protected static Socket echoSocket;
-	
-	protected static String hostName;
-	protected static int portNumber;
-	protected static ArrayList<Integer> ports;
 
-	
-	// ATTACKER VARIABLES
-	private int attackerPort;
-	private String attackerIp;
-	
-	public Coordinator(int time, ArrayList<Integer> attackerPorts, String attIP, int attPort) {
+	protected static PrintWriter out;
+	protected static Socket echoSocket;
+
+	protected static String hostName;
+	protected Map<Integer, String> attackers;
+
+	/**
+	 * Constructor used by the user interface to set the desired class
+	 * parameters
+	 * 
+	 * @param time
+	 *            - the time of attack.
+	 * @param attks
+	 *            - the list of attackers.
+	 * @param attIP
+	 *            - the targets ip address.
+	 * @param attPort
+	 *            - the target port.
+	 */
+	public Coordinator(int time, Map<Integer, String> attks, String attIP,
+			int attPort) {
 		this.timeOfAttack = time;
-		this.ports = attackerPorts;
-		this.hostName = "localhost";
+		this.attackers = attks;
 		this.attackingIP = attIP;
 		this.attackingPort = attPort;
 	}
-	
-	public void attack(){
+
+	/**
+	 * Send the time of attack
+	 */
+	public void attack() {
 		try {
 			sendTOA();
 			System.out.println("ATTACK!!!!!!!!");
@@ -48,57 +58,49 @@ public class Coordinator {
 		} catch (UnknownHostException e) {
 			System.out.println("NONE ONE IS HOME!!");
 
-		} catch(ConnectException e){
-		//	System.out.println("No one is listening on port: " + thisPort);
-			System.out.println("Either the attackers already know the time of attack, or don't want to know!");
+		} catch (ConnectException e) {
+			System.out
+					.println("Either the attackers already know the time of attack, or don't want to know!");
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
-	
+
 	/**
 	 * Send the time to the attackers
-	 * @throws IOException 
-	 * @throws UnknownHostException 
+	 * 
+	 * @throws IOException
+	 * @throws UnknownHostException
 	 */
 	@SuppressWarnings("resource")
-	protected void sendTOA() throws UnknownHostException, ConnectException, IOException {
-		// loop over all ports of the attackers.
-		for (int i = 0; i < ports.size(); i++) {
-			int thisPort = ports.get(i);
-			System.out.printf("  Port: %d\n", thisPort);
-			echoSocket = new Socket(hostName, thisPort);
+	protected void sendTOA() throws UnknownHostException, ConnectException,
+			IOException {
+		String aip;
+		int aport;
+		for (Map.Entry<Integer, String> entry : attackers.entrySet()) {
+			System.out.println("IP: " + entry.getKey() + " port: "
+					+ entry.getValue());
+			aip = entry.getValue();
+			aport = entry.getKey();
+			echoSocket = new Socket(aip, aport);
 
 			try {
 				out = new PrintWriter(echoSocket.getOutputStream(), true);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			try {
-				in = new BufferedReader(new InputStreamReader(
-						echoSocket.getInputStream()));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			stdIn = new BufferedReader(new InputStreamReader(System.in));
-			
+
 			out.println(timeOfAttack);
 			out.println(attackingIP);
 			out.println(attackingPort);
 
-			this.close();
+			close();
+
 		}
 
-		
-	
 	}
 
-	
 	/**
 	 * Close the connection to the server
 	 */
@@ -110,5 +112,4 @@ public class Coordinator {
 		}
 	}
 
-	
 }

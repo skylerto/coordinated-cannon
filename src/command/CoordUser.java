@@ -1,10 +1,16 @@
 package command;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
-
 import client.Coordinator;
 
+/**
+ * Command-line user interface for an attack coordinator.
+ * 
+ * @author cse23170 (212166906)
+ *
+ */
 public class CoordUser {
 
 	private static Coordinator coord;
@@ -13,7 +19,7 @@ public class CoordUser {
 		Scanner in = new Scanner(System.in);
 		String input, ip = null;
 		int time, port = 0;
-		ArrayList<Integer> ports = new ArrayList<Integer>();
+		Map<Integer, String> ports = new HashMap<Integer, String>();
 
 		System.out.println("Welcome to Trojan Cannon, you're a coordinator!");
 		System.out.print("Please enter a command: ");
@@ -47,8 +53,8 @@ public class CoordUser {
 				System.out.print("  Ready to mount your attack?(y/n)");
 				input = in.nextLine();
 				if (input.compareTo("y") == 0) {
-					if(coord == null){
-						System.out.println("  Please run settime");		
+					if (coord == null) {
+						System.out.println("  Please run settime");
 					} else {
 						coord.attack();
 					}
@@ -70,7 +76,14 @@ public class CoordUser {
 							port = Integer.parseInt(input);
 							System.out.printf(
 									"  The port you've chosen is: %d \n", port);
-							ports.add(port);
+
+							System.out
+									.print("Please enter an attacker ip address: ");
+
+							input = in.nextLine();
+							System.out.println("  The ip you've chosen is: "
+									+ input);
+							ports.put(port, input);
 						} catch (NumberFormatException e) {
 							System.out.println("Not a number! ");
 							break;
@@ -78,8 +91,8 @@ public class CoordUser {
 						System.out
 								.print("Please enter another attacker port, or say done: ");
 					}
-				} while (!(input.compareTo("done") == 0));
-				
+				} while (in.hasNext());
+
 				System.out.print("Please enter a target ip: ");
 				input = in.nextLine();
 
@@ -107,7 +120,5 @@ public class CoordUser {
 			System.out.print("Please enter a command: ");
 
 		}
-		System.out.println("Hello, World!");
-		System.out.println(System.currentTimeMillis());
 	}
 }

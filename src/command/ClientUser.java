@@ -1,7 +1,15 @@
-package client;
+package command;
 
 import java.util.Scanner;
 
+import client.Client;
+
+/**
+ * Command-line user interface for an attacker.
+ * 
+ * @author cse23170 (212166906)
+ *
+ */
 public class ClientUser {
 	private static Client attacker;
 
