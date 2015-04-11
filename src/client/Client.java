@@ -31,9 +31,7 @@ public class Client implements Attacker {
 	protected static BufferedReader stdIn;
 	protected static Socket echoSocket;
 	
-	public Client(int myport, String attackIP, int attackPort){
-		this.attackingIP = attackIP;
-		this.attackingPort = attackPort;
+	public Client(int myport){
 		this.listeningPort = myport;
 	}
 	
@@ -60,11 +58,11 @@ public class Client implements Attacker {
 			TOA = (int) (System.currentTimeMillis() + TOA);
 			System.out.println(TOA);
 			
-			attackingIP = in.readLine();
+			this.attackingIP = in.readLine();
 			System.out.println(attackingIP);
 			
 			input = in.readLine();
-			attackingPort = Integer.parseInt(input);
+			this.attackingPort = Integer.parseInt(input);
 			System.out.println(attackingIP);
 			try {
 				socket.close();

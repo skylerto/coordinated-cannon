@@ -24,7 +24,6 @@ public class CoordUser {
 			if (input.compareTo("settime") == 0) {
 				if (ports.size() < 1) {
 					System.out.println("  please run attackinfo first");
-
 				} else {
 					System.out
 							.print("Please enter a time of attack (HHMMSS): ");

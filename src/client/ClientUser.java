@@ -18,11 +18,11 @@ public class ClientUser {
 			input = in.nextLine();
 			
 			if(input.compareTo("get time") == 0){
-				if(myport == 0 || port == 0 || ip == null){
+				if(myport == 0){
 					System.out.println("  Please run attackifo first...");	
 				} else {
 					System.out.println("  Waiting to receive time from Coordinator");
-					attacker = new Client(myport, ip, port);
+					attacker = new Client(myport);
 					attacker.getTOA();
 				}
 			} else if(input.compareTo("attackinfo") == 0){
@@ -37,7 +37,7 @@ public class ClientUser {
 					System.out.print("Please enter a time of attack (HHMMSS): ");
 					input = in.nextLine();
 				}
-				
+		/*		
 				System.out.print("Please enter a target ip: ");
 				input = in.nextLine();
 				
@@ -53,6 +53,7 @@ public class ClientUser {
 					System.out.print("Please enter a time of attack (HHMMSS): ");
 					input = in.nextLine();
 				}
+				*/
 			} else if(input.compareTo("exit") == 0){
 				break;
 			} else {
