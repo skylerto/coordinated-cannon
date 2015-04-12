@@ -7,6 +7,11 @@ import client.Client;
 /**
  * Command-line user interface for an attacker.
  * 
+ *  Commands include:
+ * 	- get time: 	listen on the specified port for the coordinator to broadcast the time of attack.
+ * 	- attackinfo:	sets the listening port of the attacker.
+ * 	- exit:			closes down the interface for the coordinator.
+ * 
  * @author cse23170 (212166906)
  *
  */
@@ -14,9 +19,10 @@ public class ClientUser {
 	private static Client attacker;
 
 	public static void main(String[] args) {
+		@SuppressWarnings("resource")
 		Scanner in = new Scanner(System.in);
 		String input, ip = null;
-		int time = 0, port = 0, myport = 0;
+		int port = 0, myport = 0;
 		
 		System.out.println("Welcome to Trojan Cannon, you're an attacker!");
 		System.out.print("Please enter a command: ");
@@ -40,28 +46,11 @@ public class ClientUser {
 
 				try {
 					myport = Integer.parseInt(input);
-					System.out.printf("  The port you've chosen is: %d and the ip you've chosen is: %s\n", port, ip);
+					System.out.printf("  The port you've chosen is: %d\n", myport);
 				} catch (NumberFormatException e){
-					System.out.print("Please enter a time of attack (HHMMSS): ");
+					System.out.print("  The port is not available.");
 					input = in.nextLine();
 				}
-		/*		
-				System.out.print("Please enter a target ip: ");
-				input = in.nextLine();
-				
-				ip = input;
-				
-				System.out.print("Please enter a target port: ");
-				input = in.nextLine();
-
-				try {
-					port = Integer.parseInt(input);
-					System.out.printf("  The port you've chosen is: %d and the ip you've chosen is: %s\n", port, ip);
-				} catch (NumberFormatException e){
-					System.out.print("Please enter a time of attack (HHMMSS): ");
-					input = in.nextLine();
-				}
-				*/
 			} else if(input.compareTo("exit") == 0){
 				break;
 			} else {
@@ -71,8 +60,6 @@ public class ClientUser {
 			System.out.print("Please enter a command: ");
 
 		}
-		System.out.println("Hello, World!");
-		System.out.println(System.currentTimeMillis());
 	}
 
 }

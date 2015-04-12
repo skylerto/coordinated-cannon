@@ -8,6 +8,19 @@ import client.Coordinator;
 /**
  * Command-line user interface for an attack coordinator.
  * 
+ * Commands include: 
+ * - settime:	 	send the time of attack to a list of attackers,
+ * 					must have already specified the attackers ip 
+ * 					addresses and ports they’re listening on.
+ * 
+ *  - attackinfo: 	specify a list of attackers (ip address and port) 
+ *  				and a target ip and port.
+ *  
+ *  - attack:		send the clients the time of attacker and target, 
+ *  				then let them DoS their target.
+ *  
+ *  - exit:			Closes down the interface for the coordinator.
+ * 
  * @author cse23170 (212166906)
  *
  */
